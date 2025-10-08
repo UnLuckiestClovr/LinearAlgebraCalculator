@@ -23,3 +23,6 @@
 2025-10-07 18:12:54,501 - An error occurred: index 2 is out of bounds for axis 0 with size 2
 2025-10-07 18:12:54,502 - An error occurred: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (2, 2) + inhomogeneous part.
 2025-10-07 18:12:54,504 - An error occurred: index 3 is out of bounds for axis 0 with size 3
+2025-10-07 18:14:19,605 - An error occurred: index 2 is out of bounds for axis 0 with size 2
+2025-10-07 18:14:19,606 - An error occurred: setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (2, 2) + inhomogeneous part.
+2025-10-07 18:14:19,608 - An error occurred: index 3 is out of bounds for axis 0 with size 3
