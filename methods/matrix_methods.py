@@ -1,3 +1,24 @@
+import numpy as np
+
+def iterative_addition(matrices: list):
+    matrixArray = np.array(matrices)
+
+    result = None
+    for matrixIndex in range(matrixArray.size):
+        if result is None:
+            print('Starting Addition...')
+            result = matrixArray[matrixIndex]
+        else:
+            if (result.shape != matrixArray[matrixIndex].shape):
+                print("Matrices must have the same dimensions for addition.")
+                break
+            print(f'Adding {result} + {matrixArray[matrixIndex]}')
+            result = result + matrixArray[matrixIndex]
+            print(f'Result: {result}')
+    
+    return result
+
+
 def matrix_addition(A: list,B: list):
     """
     Adds two matrices A and B of the same dimensions.
@@ -7,14 +28,14 @@ def matrix_addition(A: list,B: list):
         B (list): Second matrix.
     """
 
-    if (len(A) != len(B) or len(A[0]) != len(B[0])):
-        # Throw an Error if either scale of the matrices (rows or columns) do not match exactly.
+    arrayA = np.array(A)
+    arrayB = np.array(B)
+
+    if (arrayA.shape != arrayB.shape):
         raise ValueError("Matrices must have the same dimensions for addition.")
     
-    print(f'{A} + {B} = {[[A[i][j] + B[i][j] for j in range(len(A[0]))] for i in range(len(A))]}')
-    
-    return [
-        # Iterates through the rows and columns of the matrices, adding corresponding elements.
-        [A[i][j] + B[i][j] for j in range(len(A[0]))] for i in range(len(A))
-    ]
+    result = arrayA + arrayB
 
+    print(f'{A} + {B} = {result}')
+
+    return result
