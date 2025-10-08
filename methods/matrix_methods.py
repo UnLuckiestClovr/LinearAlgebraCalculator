@@ -12,9 +12,17 @@ def iterative_addition(matrices: list):
             if (result.shape != matrixArray[matrixIndex].shape):
                 print("Matrices must have the same dimensions for addition.")
                 break
-            print(f'Adding {result} + {matrixArray[matrixIndex]}')
+            print(f'Adding \n{result} + \n{matrixArray[matrixIndex]}')
+
+            # SHow the addition step by step
+            for i in range(result.shape[0]):
+                rowStr = ""
+                for j in range(result.shape[1]):
+                    rowStr += f'{result[i][j]} + {matrixArray[matrixIndex][i][j]} = {result[i][j] + matrixArray[matrixIndex][i][j]} | '
+                print(rowStr[:-3])  # Remove the last ' | ' for cleaner output
+
             result = result + matrixArray[matrixIndex]
-            print(f'Result: {result}')
+            print(f'Result: \n{result}')
     
     return result
 
