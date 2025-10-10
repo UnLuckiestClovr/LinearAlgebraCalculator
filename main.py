@@ -2,7 +2,7 @@ import os, json, logging, time
 from unittest import case
 import numpy as np
 
-from methods import matrix_methods
+from methods import matrix_math
 
 
 # Configure the logger
@@ -17,7 +17,7 @@ def perform_operation(op: dict):
     try:
         match op['opname']:
             case 'add':
-                result = matrix_methods.iterative_addition(op['matrices'])
+                result = matrix_math.iterative_addition(op['matrices'])
 
                 print(result)
             case _:
@@ -58,3 +58,16 @@ while(True):
         break
     else:
         handle_equations()
+
+
+"""
+JSON Structure:
+
+{
+    "opname": <string>,
+    "matrices": [
+        [[1, 2], [3, 4]],
+        [[5, 6], [7, 8]]
+    ]
+}
+"""
