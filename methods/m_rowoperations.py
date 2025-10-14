@@ -12,6 +12,6 @@ def row_operations(matrixList:list):
 
     matrix = Matrix(matrixList)
 
-
+    matrix.print_matrix()
 
     return matrix.return_matrix()

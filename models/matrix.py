@@ -1,8 +1,13 @@
 import numpy as np
 
 class Matrix:
-    def __init__(self, data: list):
-        self.data = np.array(data)
+    def __init__(self, data):
+        if isinstance(data, list):
+            self.data = np.array(data)
+            self.shape = self.data.shape
+        elif isinstance(data, np.ndarray):
+            self.data = data
+            self.shape = self.data.shape
 
     def swap(self, row1:int, row2:int):
         row1Data = self.data[row1]
@@ -46,10 +51,37 @@ class Matrix:
     def determinant(self):
         if self.data.shape[0] != self.data.shape[1]:
             raise ValueError("Determinant can only be calculated for square matrices.")
-        return np.linalg.det(self.data)
-    
-    def solve_det(self):
-        pass
-    
+        
+        det = np.linalg.det(self.data)
+        self.print_matrix()
+        print(f'Determinant: {det}')
+
+        return det
+
+    def solve_variables(self, solution_matrix:list):
+        # Instead of hardcoding values we will store them in a list to allow for scalability.
+        variableSolutions = []
+        
+        # Find the determinant of the original matrix
+        D = self.determinant()
+        for i in range(self.shape[0]):
+            modified_matrix = Matrix(self.data.copy())
+
+            # Replace the i-th column with the solution matrix
+            for j in range(self.shape[1]):
+                modified_matrix.data[j][i] = solution_matrix[j]
+
+            # Calculate the determinant of the modified matrix
+            D_i = modified_matrix.determinant()
+
+            # Calculate the value of the variable using Cramer's Rule
+            variableSolutions.append(D_i / D if D != 0 else 0)
+
+        return variableSolutions
+
     def return_matrix(self):
         return self.data
+    
+    def print_matrix(self):
+        print(self.data)
+        return self

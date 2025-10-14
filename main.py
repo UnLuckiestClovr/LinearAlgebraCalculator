@@ -27,7 +27,7 @@ def perform_operation(op: dict):
         # Log the exception along with additional information
         logging.info('An error occurred: %s', str(e))
     measure_response_time(start_time)
-            
+
 
 
 def handle_equations():
@@ -42,7 +42,6 @@ def handle_equations():
             for operation in npArray:
                 perform_operation(operation)
 
-            
     except FileNotFoundError:
         print("input.json file not found. Please create the file and add your equations and arrays.")
     except Exception as e:
