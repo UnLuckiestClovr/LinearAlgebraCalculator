@@ -1,33 +1,6 @@
 import numpy as np
 
-
-class Matrix:
-    def __init__(self, data: list):
-        self.data = np.array(data)
-
-    def add(self, added_matrix:list):
-        self.data = self.data + np.array(added_matrix)
-        return self
-    
-    def subtract(self, subtracted_matrix:list):
-        self.data = self.data - np.array(subtracted_matrix)
-        return self
-    
-    def multiply(self, multiplied_matrix:list):
-        self.data = self.data @ np.array(multiplied_matrix)
-        return self
-    
-    def multify_scalar(self, scalar:float):
-        self.data = self.data * scalar
-        return self
-    
-    def divide_scalar(self, scalar:float):
-        self.data = self.data / scalar
-        return self
-
-    
-    def return_matrix(self):
-        return self.data
+from models.matrix import Matrix
 
 
 def iterative_addition(matrices: list):
