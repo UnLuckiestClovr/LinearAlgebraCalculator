@@ -1,4 +1,5 @@
 import numpy as np
+from fractions import Fraction
 
 class Matrix:
     def __init__(self, data):
@@ -58,7 +59,16 @@ class Matrix:
 
         return det
 
-    def solve_variables(self, solution_matrix:list):
+    def solve_variables(self, solution_matrix: np.ndarray):
+        """
+        Solve a system of linear equations using Cramer's Rule.
+        To keep scalability high, we will not hardcode for 2x2 or 3x3 matrices, instead choosing to use a "Solution Array".
+
+        Args:
+            solution_matrix (list): A 1D list representing the constants on the right side of the equations.
+        Returns:
+            list: A list containing the solutions for each variable. [x: value, y: value, z: value, ...]
+        """
         # Instead of hardcoding values we will store them in a list to allow for scalability.
         variableSolutions = []
         
@@ -75,7 +85,7 @@ class Matrix:
             D_i = modified_matrix.determinant()
 
             # Calculate the value of the variable using Cramer's Rule
-            variableSolutions.append(D_i / D if D != 0 else 0)
+            variableSolutions.append(Fraction(D_i / D).limit_denominator() if D != 0 else 0)
 
         return variableSolutions
 

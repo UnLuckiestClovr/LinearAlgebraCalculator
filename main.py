@@ -2,7 +2,7 @@ import os, json, logging, time
 from unittest import case
 import numpy as np
 
-from methods import matrix_math
+from methods import matrix_math, m_rowoperations
 
 
 # Configure the logger
@@ -20,6 +20,8 @@ def perform_operation(op: dict):
                 result = matrix_math.iterative_addition(op['matrices'])
 
                 print(result)
+            case 'solve':
+                m_rowoperations.solve_matrix_values(np.array(op['matrices']))
             case _:
                 return None # None is Python's version of 'null'
     except Exception as e:
