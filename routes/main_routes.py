@@ -19,9 +19,9 @@ async def matrix_addition(operation: Operation):
 
     try:
         if isinstance(operation.matrixB, float):
-            return Matrix(operation.matrixA).add_number(operation.matrixB).return_matrix()
+            return {"result": Matrix(operation.matrixA).add_number(operation.matrixB).return_matrix().tolist()}
         elif isinstance(operation.matrixB, list):
-            return Matrix(operation.matrixA).add(operation.matrixB).return_matrix()
+            return {"result": Matrix(operation.matrixA).add(operation.matrixB).return_matrix().tolist()}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
@@ -33,9 +33,9 @@ async def matrix_subtraction(operation: Operation):
 
     try:
         if isinstance(operation.matrixB, float):
-            return Matrix(operation.matrixA).subtract_number(operation.matrixB).return_matrix()
+            return {"result": Matrix(operation.matrixA).subtract_number(operation.matrixB).return_matrix().tolist()}
         elif isinstance(operation.matrixB, list):
-            return Matrix(operation.matrixA).subtract(operation.matrixB).return_matrix()
+            return {"result": Matrix(operation.matrixA).subtract(operation.matrixB).return_matrix().tolist()}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
@@ -47,9 +47,9 @@ async def matrix_multiplication(operation: Operation):
 
     try:
         if isinstance(operation.matrixB, float):
-            return Matrix(operation.matrixA).multify_scalar(operation.matrixB).return_matrix()
+            return {"result": Matrix(operation.matrixA).multiply_scalar(operation.matrixB).return_matrix().tolist()}
         elif isinstance(operation.matrixB, list):
-            return Matrix(operation.matrixA).multiply(operation.matrixB).return_matrix()
+            return {"result": Matrix(operation.matrixA).multiply(operation.matrixB).return_matrix().tolist()}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
@@ -60,7 +60,7 @@ async def matrix_solver(operation: Operation):
         raise HTTPException(status_code=400, detail="Both inputs are required for solving.")
 
     try:
-        return Matrix(operation.matrixA).solve_variables(np.array(operation.matrixB))
+        return {"result": Matrix(operation.matrixA).solve_variables(np.array(operation.matrixB))}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
@@ -71,7 +71,7 @@ async def matrix_determinant(operation: Operation):
         raise HTTPException(status_code=400, detail="Input matrix is required for determinant calculation.")
 
     try:
-        return Matrix(operation.matrixA).determinant()
+        return {"result": Matrix(operation.matrixA).determinant()}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 

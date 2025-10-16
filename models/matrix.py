@@ -49,7 +49,7 @@ class Matrix:
         self.data = self.data @ np.array(multiplied_matrix)
         return self
     
-    def multify_scalar(self, scalar:float):
+    def multiply_scalar(self, scalar:float):
         self.data = self.data * scalar
         return self
     
