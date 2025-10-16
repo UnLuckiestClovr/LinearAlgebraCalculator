@@ -33,8 +33,16 @@ class Matrix:
         self.data = self.data + np.array(added_matrix)
         return self
     
+    def add_number(self, number:float):
+        self.data = self.data + number
+        return self
+    
     def subtract(self, subtracted_matrix:list):
         self.data = self.data - np.array(subtracted_matrix)
+        return self
+    
+    def subtract_number(self, number:float):
+        self.data = self.data - number
         return self
     
     def multiply(self, multiplied_matrix:list):
