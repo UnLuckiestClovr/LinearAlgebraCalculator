@@ -96,6 +96,19 @@ class Matrix:
             variableSolutions.append(Fraction(D_i / D).limit_denominator() if D != 0 else 0)
 
         return variableSolutions
+    
+
+    def transpose(self):
+        self.data = self.data.T
+
+    def inverse(self):
+        if self.data.shape[0] != self.data.shape[1]:
+            raise ValueError("Inverse can only be calculated for square matrices.")
+        
+        
+        self.data = np.linalg.inv(self.data)
+        return self
+
 
     def return_matrix(self):
         return self.data
