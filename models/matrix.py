@@ -1,6 +1,7 @@
 import numpy as np
 from fractions import Fraction
 
+
 class Matrix:
     def __init__(self, data):
         if isinstance(data, list):
@@ -79,7 +80,7 @@ class Matrix:
         """
         # Instead of hardcoding values we will store them in a list to allow for scalability.
         variableSolutions = []
-        
+            
         # Find the determinant of the original matrix
         D = self.determinant()
         for i in range(self.shape[0]):
@@ -87,27 +88,63 @@ class Matrix:
 
             # Replace the i-th column with the solution matrix
             for j in range(self.shape[1]):
-                modified_matrix.data[j][i] = solution_matrix[j]
+                    modified_matrix.data[j][i] = solution_matrix[j]
 
             # Calculate the determinant of the modified matrix
             D_i = modified_matrix.determinant()
 
             # Calculate the value of the variable using Cramer's Rule
-            variableSolutions.append(Fraction(D_i / D).limit_denominator() if D != 0 else 0)
+            variableSolutions.append(Fraction(D_i / D).limit_denominator().__str__() if D != 0 else 0)
 
         return variableSolutions
     
 
     def transpose(self):
         self.data = self.data.T
+        return self
 
     def inverse(self):
-        if self.data.shape[0] != self.data.shape[1]:
+        num_rows, num_cols = self.shape
+        if num_rows != num_cols:
             raise ValueError("Inverse can only be calculated for square matrices.")
-        
-        
-        self.data = np.linalg.inv(self.data)
-        return self
+
+        # Create an identity matrix of the same shape
+        identity = np.eye(num_rows)
+        augmented_matrix = np.hstack((self.data.copy(), identity))
+
+        for pivot_row in range(num_rows):
+            pivot_value = self.data[pivot_row][pivot_row]
+
+            # Handle Possible Zero-Pivots
+            if pivot_value == 0:
+                for row in range(pivot_row + 1, num_rows):
+                    if self.data[row][pivot_row] != 0:
+                        # Swap rows
+                        self.data[[pivot_row, row]] = self.data[[row, pivot_row]]
+                        break
+                else:
+                    raise ValueError("Matrix is singular and cannot be inverted.")
+                
+                pivot_value = augmented_matrix[pivot_row][pivot_row]
+            
+            # Normalize the pivot row
+            print(f"➡️ Scaling row {pivot_row} to make pivot = 1")
+            augmented_matrix[pivot_row] = augmented_matrix[pivot_row] / pivot_value
+            print(augmented_matrix,"\n")
+
+            # Eliminate Pivot Column from other rows
+            for row in range(num_rows):
+                if row != pivot_row:
+                    augmented_matrix[row] -= augmented_matrix[row][pivot_row] * augmented_matrix[pivot_row]
+
+        # Extract right half → inverse
+        inverse_matrix = augmented_matrix[:, num_rows:]
+        print("✅ Inverse matrix A⁻¹:")
+        print(inverse_matrix)
+        return Matrix(inverse_matrix)
+
+        # self.data = np.linalg.inv(self.data)
+        # return self
 
 
     def return_matrix(self):

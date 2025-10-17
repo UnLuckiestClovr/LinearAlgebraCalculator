@@ -1,31 +1,7 @@
-import os, json, logging, time
-import numpy as np
-
 from typing import Union
 from fastapi import FastAPI
 
-from methods import matrix_math, m_rowoperations
 from routes import main_routes
-
-
-# Configure the logger
-logging.basicConfig(filename='logs/error.log', level=logging.INFO, format="%(asctime)s - %(message)s")
-
-def measure_response_time(start_time):
-    print("Response time:", time.perf_counter() - start_time)
-
-
-# """
-# JSON Structure:
-
-# {
-#     "opname": <string>,
-#     "matrices": [
-#         [[1, 2], [3, 4]],
-#         [[5, 6], [7, 8]]
-#     ]
-# }
-# """
 
 if __name__ == "__main__":
     import uvicorn

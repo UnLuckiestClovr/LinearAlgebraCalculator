@@ -1,9 +1,17 @@
+import logging, traceback
 import numpy as np        
 
 from fastapi import APIRouter, Depends, HTTPException, Path
 
 from models.api_models import InputData, InputData_Singular
 from models.matrix import Matrix
+
+# Configure the logger
+logging.basicConfig(filename='logs/error.log', level=logging.INFO, format="%(asctime)s - %(message)s")
+
+
+def log_exception(message: Exception):
+    logging.error(traceback.format_exc())
 
 router = APIRouter(
     prefix="/operation",
@@ -23,6 +31,7 @@ async def matrix_addition(operation: InputData):
         elif isinstance(operation.inputB, list):
             return {"result": Matrix(operation.inputA).add(operation.inputB).return_matrix().tolist()}
     except Exception as e:
+        log_exception(e)
         raise HTTPException(status_code=400, detail=str(e))
 
 
@@ -37,6 +46,7 @@ async def matrix_subtraction(operation: InputData):
         elif isinstance(operation.inputB, list):
             return {"result": Matrix(operation.inputA).subtract(operation.inputB).return_matrix().tolist()}
     except Exception as e:
+        log_exception(e)
         raise HTTPException(status_code=400, detail=str(e))
 
 
@@ -51,17 +61,25 @@ async def matrix_multiplication(operation: InputData):
         elif isinstance(operation.inputB, list):
             return {"result": Matrix(operation.inputA).multiply(operation.inputB).return_matrix().tolist()}
     except Exception as e:
+        log_exception(e)
         raise HTTPException(status_code=400, detail=str(e))
 
 
 @router.post("/solve")
-async def matrix_solver(operation: InputData):
-    if (operation.inputB is None or operation.inputA is None):
-        raise HTTPException(status_code=400, detail="Both inputs are required for solving.")
+async def matrix_solver(operation: InputData_Singular):
+    if (operation.inputA is None):
+        raise HTTPException(status_code=400, detail="Input matrix is required for solving.")
 
     try:
-        return {"result": Matrix(operation.inputA).solve_variables(np.array(operation.inputB))}
+        coefficientMatrix = np.array(operation.inputA)[:, -1]
+        valueMatrix = np.array(operation.inputA)[:, :-1]
+
+        print("Value Matrix: ", valueMatrix)
+        print("Coefficient Matrix: ", coefficientMatrix)
+
+        return {"result": Matrix(valueMatrix).solve_variables(np.array(coefficientMatrix))}
     except Exception as e:
+        log_exception(e)
         raise HTTPException(status_code=400, detail=str(e))
 
 
@@ -73,6 +91,7 @@ async def matrix_determinant(operation: InputData_Singular):
     try:
         return {"result": Matrix(operation.inputA).determinant()}
     except Exception as e:
+        log_exception(e)
         raise HTTPException(status_code=400, detail=str(e))
 
 
@@ -86,6 +105,7 @@ async def matrix_transpose(operation: InputData_Singular):
         matrix.transpose()
         return {"result": matrix.return_matrix().tolist()}
     except Exception as e:
+        log_exception(e)
         raise HTTPException(status_code=400, detail=str(e))
 
 
@@ -97,4 +117,5 @@ async def matrix_inverse(operation: InputData_Singular):
     try:
         pass
     except Exception as e:
+        log_exception(e)
         raise HTTPException(status_code=400, detail=str(e))
