@@ -104,6 +104,10 @@ class Matrix:
         return self
 
     def inverse(self):
+        if (self.determinant() == 0):
+            raise ValueError("Matrix is singular and cannot be inverted.")
+
+        # Ensure the matrix is square
         num_rows, num_cols = self.shape
         if num_rows != num_cols:
             raise ValueError("Inverse can only be calculated for square matrices.")

@@ -2,6 +2,8 @@ import logging, traceback
 import numpy as np        
 
 from fastapi import APIRouter, Depends, HTTPException, Path
+from typing import List
+from fractions import Fraction
 
 from models.api_models import InputData, InputData_Singular
 from models.matrix import Matrix
@@ -18,6 +20,39 @@ router = APIRouter(
     tags=["Matrix Operations"],
     responses={404 : {"description":"Not Found"}}
 )
+
+
+def float_to_frac_str(x: float, max_denominator: int = 10**6) -> str:
+    """
+    Convert a single float to a Fraction string.
+    Uses limit_denominator to produce a human-friendly rational approximation.
+    """
+    if np.isnan(x):
+        return "nan"
+    if np.isinf(x):
+        return "inf" if x > 0 else "-inf"
+
+    frac = Fraction(x).limit_denominator(max_denominator)
+    if frac.denominator == 1:
+        return str(frac.numerator)
+    else:
+        return f"{frac.numerator}/{frac.denominator}"
+
+
+def matrix_floats_to_fraction_strings(mat: np.ndarray, max_denominator: int = 10**6) -> List[List[str]]:
+    """
+    Convert a matrix (numpy ndarray or nested list) of floats 
+    to a nested list of fraction strings.
+    """
+    arr = np.asarray(mat, dtype=float)
+    out = []
+    for row in arr:
+        out_row = [
+            float_to_frac_str(float(x), max_denominator=max_denominator) for x in row
+        ]
+        out.append(out_row)
+    return out
+
 
 
 @router.post("/add")
@@ -115,7 +150,8 @@ async def matrix_inverse(operation: InputData_Singular):
         raise HTTPException(status_code=400, detail="Input matrix is required for inversion.")
 
     try:
-        return {"result": Matrix(operation.inputA).inverse().return_matrix().tolist()}
+        invertedMatrix = Matrix(operation.inputA).inverse().return_matrix()
+        return {"result": matrix_floats_to_fraction_strings(invertedMatrix)}
     except Exception as e:
         log_exception(e)
         raise HTTPException(status_code=400, detail=str(e))
