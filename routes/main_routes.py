@@ -115,7 +115,7 @@ async def matrix_inverse(operation: InputData_Singular):
         raise HTTPException(status_code=400, detail="Input matrix is required for inversion.")
 
     try:
-        pass
+        return {"result": Matrix(operation.inputA).inverse().return_matrix().tolist()}
     except Exception as e:
         log_exception(e)
         raise HTTPException(status_code=400, detail=str(e))

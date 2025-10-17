@@ -112,15 +112,17 @@ class Matrix:
         identity = np.eye(num_rows)
         augmented_matrix = np.hstack((self.data.copy(), identity))
 
+        print(self.data)
+        print("➡️ Starting Inversion Process (A | I) → (I | A⁻¹):")
+
         for pivot_row in range(num_rows):
-            pivot_value = self.data[pivot_row][pivot_row]
+            pivot_value = augmented_matrix[pivot_row, pivot_row]
 
             # Handle Possible Zero-Pivots
             if pivot_value == 0:
                 for row in range(pivot_row + 1, num_rows):
-                    if self.data[row][pivot_row] != 0:
-                        # Swap rows
-                        self.data[[pivot_row, row]] = self.data[[row, pivot_row]]
+                    if augmented_matrix[row, pivot_row] != 0:
+                        augmented_matrix[[pivot_row, row]] = augmented_matrix[[row, pivot_row]]
                         break
                 else:
                     raise ValueError("Matrix is singular and cannot be inverted.")
@@ -133,18 +135,17 @@ class Matrix:
             print(augmented_matrix,"\n")
 
             # Eliminate Pivot Column from other rows
-            for row in range(num_rows):
-                if row != pivot_row:
-                    augmented_matrix[row] -= augmented_matrix[row][pivot_row] * augmented_matrix[pivot_row]
+            for target_row in range(num_rows):
+                if target_row != pivot_row:
+                    factor = augmented_matrix[target_row, pivot_row]  # value to eliminate
+                    augmented_matrix[target_row, :] -= factor * augmented_matrix[pivot_row, :]
 
         # Extract right half → inverse
         inverse_matrix = augmented_matrix[:, num_rows:]
         print("✅ Inverse matrix A⁻¹:")
         print(inverse_matrix)
-        return Matrix(inverse_matrix)
 
-        # self.data = np.linalg.inv(self.data)
-        # return self
+        return Matrix(inverse_matrix)
 
 
     def return_matrix(self):
