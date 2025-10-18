@@ -17,58 +17,110 @@ class Matrix:
         self.data[row2] = row1Data
 
         return self
-    
+
+
     def scale(self, row:int, scalar:float):
         self.data[row] = self.data[row] * scalar
         return self
-    
+
+
     def add_scaled(self, source_row:int, target_row:int, scalar:float):
         self.data[target_row] = self.data[target_row] + (self.data[source_row] * scalar)
         return self
-    
+
+
     def subtract_scaled(self, source_row:int, target_row:int, scalar:float):
         self.data[target_row] = self.data[target_row] - (self.data[source_row] * scalar)
         return self
-    
+
+
     def add(self, added_matrix:list):
         self.data = self.data + np.array(added_matrix)
         return self
-    
+
+
     def add_number(self, number:float):
         self.data = self.data + number
         return self
-    
+
+
     def subtract(self, subtracted_matrix:list):
         self.data = self.data - np.array(subtracted_matrix)
         return self
-    
+
+
     def subtract_number(self, number:float):
         self.data = self.data - number
         return self
-    
+
+
     def multiply(self, multiplied_matrix:list):
         self.data = self.data @ np.array(multiplied_matrix)
         return self
-    
+
+
     def multiply_scalar(self, scalar:float):
         self.data = self.data * scalar
         return self
-    
+
+
     def divide_scalar(self, scalar:float):
         self.data = self.data / scalar
         return self
-    
-    def determinant(self):
-        if self.data.shape[0] != self.data.shape[1]:
-            raise ValueError("Determinant can only be calculated for square matrices.")
-        
-        det = np.linalg.det(self.data)
-        self.print_matrix()
-        print(f'Determinant: {det}')
 
-        return det
 
-    def solve_variables(self, solution_matrix: np.ndarray):
+    def determinant(self, matrixList: np.ndarray | None = None) -> float:
+        if matrixList is None:
+            matrixList = self.data
+
+        print(f"\n\nFinding the Det of Matrix:\n{matrixList}")
+
+        if (matrixList.shape[0] != matrixList.shape[1]):
+            raise Exception("Determinant can only be calculated for square matrices.")
+        if (matrixList.shape[0] == 1):
+            print(f"Determinant of 1x1 matrix is the single element itself. {matrixList[0][0]}\n\n")
+            return matrixList[0][0]
+
+
+        # Formula : det(A) = Σ (−1)^i+j * a_ij * det(M_ij)
+        numbers = []
+
+        for row_num in range(matrixList.shape[0]):
+            column_num = 0
+            minor = np.delete(np.delete(matrixList, row_num, axis=0), column_num, axis=1)
+            print(f'Calculating minor for element ({row_num}, {column_num}):'
+                    f'\nElement Value: {matrixList[row_num][column_num]}'
+                    f'\nMinor Matrix:\n{minor}')
+
+            minor_determinant = self.determinant(minor)
+            print(f"Minor Determinant of ({row_num}, {column_num}): {minor_determinant}")
+
+            print(F"Calculating Cofactor: (-1)^({row_num}+{column_num}) * {matrixList[row_num][column_num]} * {minor_determinant}")
+            cofactor = ((-1) ** (row_num + column_num)) * matrixList[row_num][column_num] * minor_determinant
+            numbers.append(cofactor)
+            print(f'Cofactor for element ({row_num}, {column_num}): {cofactor}\n')
+            # for column_num in range(matrixList.shape[1]):
+            #     minor = np.delete(np.delete(matrixList, row_num, axis=0), column_num, axis=1)
+            #     print(f'Calculating minor for element ({row_num}, {column_num}):'
+            #             f'\nElement Value: {matrixList[row_num][column_num]}'
+            #             f'\nMinor Matrix:\n{minor}')
+
+            #     minor_determinant = self.determinant(minor)
+            #     print(f"Minor Determinant of ({row_num}, {column_num}): {minor_determinant}")
+
+            #     print(F"Calculating Cofactor: (-1)^({row_num}+{column_num}) * {matrixList[row_num][column_num]} * {minor_determinant}")
+            #     cofactor = ((-1) ** (row_num + column_num)) * matrixList[row_num][column_num] * minor_determinant
+            #     numbers.append(cofactor)
+            #     print(f'Cofactor for element ({row_num}, {column_num}): {cofactor}\n')
+        determinant = 0
+        for num in numbers:
+            determinant += num
+
+        print(f'Determinant: {determinant}')
+        return determinant
+
+
+    def solve_variables(self, solution_matrix: np.ndarray) -> list:
         """
         Solve a system of linear equations using Cramer's Rule.
         To keep scalability high, we will not hardcode for 2x2 or 3x3 matrices, instead choosing to use a "Solution Array".
@@ -94,7 +146,10 @@ class Matrix:
             D_i = modified_matrix.determinant()
 
             # Calculate the value of the variable using Cramer's Rule
-            variableSolutions.append(Fraction(D_i / D).limit_denominator().__str__() if D != 0 else 0)
+            if (D_i is None) or (D is None):
+                variableSolutions.append(0)
+            else:
+                variableSolutions.append(Fraction(D_i / D).limit_denominator().__str__() if D != 0 else 0)
 
         return variableSolutions
     
@@ -102,6 +157,7 @@ class Matrix:
     def transpose(self):
         self.data = self.data.T
         return self
+
 
     def inverse(self):
         if (self.determinant() == 0):
@@ -154,7 +210,8 @@ class Matrix:
 
     def return_matrix(self):
         return self.data
-    
+
+
     def print_matrix(self):
         print(self.data)
         return self
