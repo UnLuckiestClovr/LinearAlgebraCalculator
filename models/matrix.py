@@ -70,6 +70,14 @@ class Matrix:
 
 
     def determinant(self, matrixList: np.ndarray | None = None) -> float:
+        """
+        Calculate the determinant of a matrix.
+        Args:
+            matrixList (np.ndarray, optional): The matrix for which to calculate the determinant. 
+                                                If None, uses the instance's data. Defaults to None.
+        Returns:
+            float: The determinant of the matrix.
+        """
         if matrixList is None:
             matrixList = self.data
 
@@ -99,19 +107,6 @@ class Matrix:
             cofactor = ((-1) ** (row_num + column_num)) * matrixList[row_num][column_num] * minor_determinant
             numbers.append(cofactor)
             print(f'Cofactor for element ({row_num}, {column_num}): {cofactor}\n')
-            # for column_num in range(matrixList.shape[1]):
-            #     minor = np.delete(np.delete(matrixList, row_num, axis=0), column_num, axis=1)
-            #     print(f'Calculating minor for element ({row_num}, {column_num}):'
-            #             f'\nElement Value: {matrixList[row_num][column_num]}'
-            #             f'\nMinor Matrix:\n{minor}')
-
-            #     minor_determinant = self.determinant(minor)
-            #     print(f"Minor Determinant of ({row_num}, {column_num}): {minor_determinant}")
-
-            #     print(F"Calculating Cofactor: (-1)^({row_num}+{column_num}) * {matrixList[row_num][column_num]} * {minor_determinant}")
-            #     cofactor = ((-1) ** (row_num + column_num)) * matrixList[row_num][column_num] * minor_determinant
-            #     numbers.append(cofactor)
-            #     print(f'Cofactor for element ({row_num}, {column_num}): {cofactor}\n')
         determinant = 0
         for num in numbers:
             determinant += num
@@ -160,6 +155,11 @@ class Matrix:
 
 
     def inverse(self):
+        """
+        Calculate the inverse of the matrix.
+        Returns:
+            Matrix: The inverse of the matrix.
+        """
         if (self.determinant() == 0):
             raise ValueError("Matrix is singular and cannot be inverted.")
 
