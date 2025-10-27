@@ -12,3 +12,6 @@ class Vector:
         else:
             raise TypeError("Invalid data type for Vector")
 
+    def pythagorean_theorem(self, values: np.ndarray) -> float:
+        return np.sqrt(np.sum(np.array(values) ** 2))
+
