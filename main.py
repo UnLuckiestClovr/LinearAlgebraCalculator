@@ -1,7 +1,7 @@
 from typing import Union
 from fastapi import FastAPI
 
-from routes import main_routes
+from routes import matrix_routes, vertex_routes
 
 if __name__ == "__main__":
     import uvicorn
@@ -11,7 +11,8 @@ if __name__ == "__main__":
         version="1.0.0"
     )
 
-    app.include_router(router=main_routes.router)
+    app.include_router(router=matrix_routes.router)
+    app.include_router(router=vertex_routes.router)
 
     @app.get("/")
     def read_root():

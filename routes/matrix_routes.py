@@ -16,7 +16,7 @@ def log_exception(message: Exception):
     logging.error(traceback.format_exc())
 
 router = APIRouter(
-    prefix="/operation",
+    prefix="/matrix",
     tags=["Matrix Operations"],
     responses={404 : {"description":"Not Found"}}
 )
