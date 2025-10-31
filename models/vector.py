@@ -74,3 +74,13 @@ class Vector:
             return np.arccos(cos_angle)
         else:
             raise ValueError("Cannot calculate angle with zero magnitude vector")
+        
+    def projection_onto(self, other):
+        if self.length != other.length:
+            raise ValueError("Vectors must be of the same length for projection")
+        
+        other_unit = other.unit_vector()
+        scalar_proj = self.dot_product(other_unit)
+        proj_vector = other_unit.scalar_multiplication(scalar_proj)
+        
+        return proj_vector
