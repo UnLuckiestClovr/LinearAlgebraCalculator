@@ -49,4 +49,28 @@ class Vector:
         self.data /= scalar
         return self
     
+    def dot_product(self, other) -> float:
+        if self.length != other.length:
+            raise ValueError("Vectors must be of the same length for dot product")
+        
+        dp = 0.0
+        for i in range(self.length):
+            dp += self.data[i] * other.data[i]
+
+        return dp
     
+    def angle_between(self, other) -> float:
+        if self.length != other.length:
+            raise ValueError("Vectors must be of the same length for angle calculation")
+        
+        dot_prod = self.dot_product(other)
+
+        mag_self = self.magnitude()
+        mag_other = other.magnitude()
+
+        if mag_self != 0 and mag_other != 0:
+            cos_angle = dot_prod / (mag_self * mag_other)
+            cos_angle = max(min(cos_angle, 1.0), -1.0)  # Clamp value to avoid numerical issues
+            return np.arccos(cos_angle)
+        else:
+            raise ValueError("Cannot calculate angle with zero magnitude vector")
