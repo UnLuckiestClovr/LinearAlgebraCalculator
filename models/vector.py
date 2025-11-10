@@ -84,3 +84,24 @@ class Vector:
         proj_vector = other_unit.scalar_multiplication(scalar_proj)
         
         return proj_vector
+
+    def finding_projection_parallelandorthogonal(self, other):
+        if self.length != other.length:
+            raise ValueError("Vectors must be of the same length for projection")
+        
+        parallel_comp = self.projection_onto(other)
+        orthogonal_comp = Vector(self.data - parallel_comp.data)
+        
+        return parallel_comp, orthogonal_comp
+    
+    def cross_product(self, other):
+        if self.length != 3 or other.length != 3:
+            raise ValueError("Cross product is only defined for 3-dimensional vectors")
+        
+        output = Vector([
+            self.data[1] * other.data[2] - self.data[2] * other.data[1],
+            self.data[2] * other.data[0] - self.data[0] * other.data[2],
+            self.data[0] * other.data[1] - self.data[1] * other.data[0]
+        ])
+
+        return output

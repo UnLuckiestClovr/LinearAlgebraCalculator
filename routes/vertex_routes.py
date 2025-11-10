@@ -39,18 +39,15 @@ def float_to_frac_str(x: float, max_denominator: int = 10**6) -> str:
         return f"{frac.numerator}/{frac.denominator}"
 
 
-def matrix_floats_to_fraction_strings(mat: np.ndarray, max_denominator: int = 10**6) -> List[List[str]]:
+def vertex_floats_to_fraction_strings(mat: np.ndarray, max_denominator: int = 10**6) -> List[str]:
     """
     Convert a matrix (numpy ndarray or nested list) of floats 
     to a nested list of fraction strings.
     """
     arr = np.asarray(mat, dtype=float)
-    out = []
-    for row in arr:
-        out_row = [
-            float_to_frac_str(float(x), max_denominator=max_denominator) for x in row
+    out = [
+            float_to_frac_str(float(x), max_denominator=max_denominator) for x in arr
         ]
-        out.append(out_row)
     return out
 
 
@@ -79,7 +76,7 @@ def vector_unit_vector(operation: InputData_Singular):
         unit_vec = vecA.unit_vector()
 
         return {
-            "unit_vector": matrix_floats_to_fraction_strings(unit_vec.data.reshape(1, -1))[0]
+            "unit_vector": vertex_floats_to_fraction_strings(unit_vec.data.reshape(1, -1))[0]
         }
 
     except Exception as e:
@@ -95,7 +92,7 @@ def vector_addition(operation: InputData):
         result = vecA.addition(vecB)
 
         return {
-            "result": matrix_floats_to_fraction_strings(result.data.reshape(1, -1))[0]
+            "result": vertex_floats_to_fraction_strings(result.data.reshape(1, -1))[0]
         }
 
     except Exception as e:
@@ -111,7 +108,7 @@ def vector_subtraction(operation: InputData):
         result = vecA.subtraction(vecB)
 
         return {
-            "result": matrix_floats_to_fraction_strings(result.data.reshape(1, -1))[0]
+            "result": vertex_floats_to_fraction_strings(result.data.reshape(1, -1))[0]
         }
 
     except Exception as e:
